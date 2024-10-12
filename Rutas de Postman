@@ -1,0 +1,34 @@
+Listar los Usuarios
+
+GET  http://127.0.0.1:5000/users
+
+Ejemplo
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "telefono": "555-1234"
+    },
+    {
+        "id": 2,
+        "name": "Douglas",
+        "telefono": "555-1234"
+    },
+    {
+        "id": 3,
+        "name": "Victor",
+        "telefono": "555-1234"
+    }
+]
+
+Agregar Usuarios
+
+POST  http://127.0.0.1:5000/users
+
+Body
+
+{
+    "name": "",
+    "telefono": ""
+}
+
