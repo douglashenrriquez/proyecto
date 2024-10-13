@@ -1,5 +1,5 @@
 Ver si tenemos python instalado ( python --version )
-Instala Flask ( pip install Flask )
+Instalar Flask ( pip install Flask )
 Instalar pymysql ( pip install pymysql )
 
 Rutas de postaman 
@@ -26,9 +26,14 @@ Ver lista de usuarios
 
 GET http://localhost:5000/users
 
+
+Eliminar usuarios
+
+DELETE http://localhost:5000/users/id del usuarios
+
 editar usuarios
 
-PUT http://localhost:5000/users
+PUT http://localhost:5000/users/id del usuarios
 
 {
     "nombre": "",
