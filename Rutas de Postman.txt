@@ -1,0 +1,43 @@
+Ver si tenemos python instalado ( python --version )
+Instala Flask ( pip install Flask )
+Instalar pymysql ( pip install pymysql )
+
+Rutas de postaman 
+
+Agregar empleado
+
+POST http://localhost:5000/users
+
+{
+    "nombre": "",
+    "apellido": "",
+    "fecha_nac": "1990-01-01",
+    "ciudad": "",
+    "direccion": "",
+    "telefono": "",
+    "cargo": "",
+    "departamento": "",
+    "salario": 50000
+}
+
+(EL departamento es de la empresa (gerente, cajero, etc) no de la ciudad)
+
+Ver lista de usuarios
+
+GET http://localhost:5000/users
+
+editar usuarios
+
+PUT http://localhost:5000/users
+
+{
+    "nombre": "",
+    "apellido": "",
+    "fecha_nac": "1990-01-01",
+    "ciudad": "",
+    "direccion": "",
+    "telefono": "",
+    "cargo": "",
+    "departamento": "",
+    "salario": 50000
+}

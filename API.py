@@ -3,8 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# Configuración de la conexión a la base de datos MySQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/users_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/user'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -37,20 +36,9 @@ class User(db.Model):
 
 @app.route("/users/<int:user_id>", methods=["GET"])
 def get_user(user_id):
-    user = db.session.get(User, user_id)  # Cambiado aquí
+    user = db.session.get(User, user_id)
     if user:
-        return jsonify({
-            "id": user.id,
-            "nombre": user.nombre,
-            "apellido": user.apellido,
-            "cargo": user.cargo,
-            "ciudad": user.ciudad,
-            "departamento": user.departamento,
-            "direccion": user.direccion,
-            "fecha_nac": str(user.fecha_nac) if user.fecha_nac else None,
-            "salario": str(user.salario) if user.salario else None,
-            "telefono": user.telefono
-        }), 200
+        return jsonify(user.to_dict()), 200
     return jsonify({"error": "Usuario no encontrado"}), 404
 
 @app.route("/users", methods=["POST"])
@@ -82,25 +70,12 @@ def create_user():
 @app.route("/users", methods=["GET"])
 def get_all_users():
     users = User.query.all()
-    result = []
-    for user in users:
-        result.append({
-            "id": user.id,
-            "nombre": user.nombre,
-            "apellido": user.apellido,
-            "cargo": user.cargo,
-            "ciudad": user.ciudad,
-            "departamento": user.departamento,
-            "direccion": user.direccion,
-            "fecha_nac": str(user.fecha_nac) if user.fecha_nac else None,
-            "salario": str(user.salario) if user.salario else None,
-            "telefono": user.telefono
-        })
+    result = [user.to_dict() for user in users]
     return jsonify(result), 200
 
 @app.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    user = db.session.get(User, user_id)  # Cambiado aquí
+    user = db.session.get(User, user_id)
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
     
@@ -109,7 +84,38 @@ def delete_user(user_id):
     
     return jsonify({"message": "Usuario eliminado correctamente"}), 200
 
+
+
+@app.route("/users/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
+    user = db.session.get(User, user_id)
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    data = request.get_json()
+    if 'nombre' in data:
+        user.nombre = data['nombre']
+    if 'apellido' in data:
+        user.apellido = data['apellido']
+    if 'fecha_nac' in data:
+        user.fecha_nac = data.get('fecha_nac')
+    if 'ciudad' in data:
+        user.ciudad = data['ciudad']
+    if 'direccion' in data:
+        user.direccion = data['direccion']
+    if 'telefono' in data:
+        user.telefono = data['telefono']
+    if 'cargo' in data:
+        user.cargo = data['cargo']
+    if 'departamento' in data:
+        user.departamento = data['departamento']
+    if 'salario' in data:
+        user.salario = data['salario']
+
+    db.session.commit()
+    return jsonify(user.to_dict()), 200
+
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()  # Crea las tablas si no existen
+        db.create_all()  
     app.run(debug=True)
